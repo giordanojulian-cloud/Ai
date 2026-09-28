@@ -5,7 +5,6 @@ import { calculatorsInCategory, inCategory, sortByPopularity, sortByRecent } fro
 import { CalculatorGrid } from "@/components/catalog/calculator-card";
 import { CategoryCard } from "@/components/catalog/category-card";
 import { Section } from "@/components/catalog/section";
-import { NewsletterForm } from "@/components/feedback/newsletter-form";
 import { SearchCombobox } from "@/components/search/search-combobox";
 import { Container } from "@/components/ui/container";
 import { siteConfig } from "@/config/site";
@@ -104,10 +103,6 @@ export default async function HomePage() {
             ))}
           </ul>
         </Section>
-
-        <section className="rounded-2xl border border-border bg-surface p-6 sm:p-10">
-          <NewsletterForm location="home" />
-        </section>
       </Container>
     </>
   );

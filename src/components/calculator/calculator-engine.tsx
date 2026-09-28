@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from "react";
 import {
   getDefaultValues,
   validateValues,
@@ -77,12 +77,15 @@ export function CalculatorEngine({ definition, name, features, afterResult }: Bo
   const result = computed ?? lastValid;
   const stale = !computed;
 
-  // Apply shared-link values once on mount. The page itself is statically
-  // rendered with defaults, so query params can only be read client-side.
+  // After hydration: mark the calculator interactive (used by E2E tests) and
+  // apply shared-link values. The page is statically rendered with defaults,
+  // so query params can only be read client-side.
+  const [ready, setReady] = useState(false);
   useEffect(() => {
     const { values: fromUrl, applied } = valuesFromSearchParams(definition, new URLSearchParams(window.location.search));
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time sync from the URL after hydration
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time post-hydration sync
     if (applied) setValues(fromUrl);
+    setReady(true);
     track("calculator_view", { slug });
   }, [definition, slug]);
 
@@ -143,6 +146,17 @@ export function CalculatorEngine({ definition, name, features, afterResult }: Bo
   const buildShareUrl = () =>
     `${window.location.origin}${window.location.pathname}?${valuesToSearchParams(definition, values).toString()}`;
 
+  // On small screens the result card sits below the form; show a compact bar while it's off-screen.
+  const resultsRef = useRef<HTMLElement>(null);
+  const [resultsVisible, setResultsVisible] = useState(true);
+  useEffect(() => {
+    const node = resultsRef.current;
+    if (!node || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(([entry]) => setResultsVisible(Boolean(entry?.isIntersecting)), { rootMargin: "0px 0px -40% 0px" });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   // Screen readers hear the headline result after typing pauses, not on every keystroke.
   const [announcement, setAnnouncement] = useState("");
   useEffect(() => {
@@ -155,26 +169,31 @@ export function CalculatorEngine({ definition, name, features, afterResult }: Bo
   }, [computed]);
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8" data-calculator={slug} data-ready={ready || undefined}>
       <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
         <section aria-label="Inputs" className="rounded-xl border border-border bg-surface p-5 sm:p-6">
-          <CalculatorForm
-            definition={definition}
-            values={values}
-            errors={errors}
-            onChange={onChange}
-            onUnitChange={onUnitChange}
-            onReset={onReset}
-          />
+          <Suspense>
+            <CalculatorForm
+              definition={definition}
+              values={values}
+              errors={errors}
+              onChange={onChange}
+              onUnitChange={onUnitChange}
+              onReset={onReset}
+            />
+          </Suspense>
         </section>
 
         <div className="flex flex-col gap-4 lg:sticky lg:top-20">
-          <section aria-label="Results" className="flex flex-col gap-5 rounded-xl border border-border bg-surface p-5 sm:p-6">
+          <section ref={resultsRef} id="results" aria-label="Results" className="scroll-mt-20 flex flex-col gap-5 rounded-xl border border-border bg-surface p-5 sm:p-6">
+            <h2 className="sr-only">Results</h2>
             <p className="sr-only" aria-live="polite" aria-atomic="true">
               {announcement}
             </p>
             {result ? (
-              <CalculatorResult result={result} stale={stale} />
+              <Suspense>
+                <CalculatorResult result={result} stale={stale} />
+              </Suspense>
             ) : (
               <p className="text-sm text-muted-foreground">Enter your details to see results.</p>
             )}
@@ -197,7 +216,21 @@ export function CalculatorEngine({ definition, name, features, afterResult }: Bo
         </div>
       </div>
 
+      {result && !resultsVisible && (
+        <a
+          href="#results"
+          aria-hidden="true"
+          tabIndex={-1}
+          className="fixed inset-x-3 bottom-3 z-30 flex items-center justify-between rounded-xl border border-border bg-surface/95 px-4 py-3 shadow-lg backdrop-blur lg:hidden"
+        >
+          <span className="text-xs text-muted-foreground">{result.primary.label}</span>
+          <span className="tabular text-lg font-semibold">{formatValue(result.primary.value, result.primary.format)}</span>
+        </a>
+      )}
+
       {result && (result.charts?.length || result.tables?.length) ? (
+        // Separate Suspense boundary: below-the-fold output hydrates in its own task.
+        <Suspense>
         <div className={stale ? "opacity-50" : undefined}>
           {result.charts && result.charts.length > 0 && (
             <div className="grid gap-6 lg:grid-cols-2">
@@ -214,6 +247,7 @@ export function CalculatorEngine({ definition, name, features, afterResult }: Bo
             </div>
           ))}
         </div>
+        </Suspense>
       ) : null}
     </div>
   );

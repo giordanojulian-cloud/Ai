@@ -50,7 +50,7 @@ function buildProviders(): Provider[] {
 }
 
 export const configuredProviders = () =>
-  buildProviders().map((p) => {
+  (features.authReady ? buildProviders() : []).map((p) => {
     const provider = typeof p === "function" ? p() : p;
     return { id: provider.id, name: provider.name, type: provider.type };
   });

@@ -39,7 +39,7 @@ export function SearchCombobox({
   const index = useSearchIndex(touched);
 
   const results = useMemo(() => (index && query.trim() ? searchIndex(index, query, 8) : []), [index, query]);
-  const showList = (open || inlineResults) && query.trim().length > 0;
+  const showList = Boolean(open || inlineResults) && query.trim().length > 0;
 
   useEffect(() => {
     if (autoFocus) inputRef.current?.focus();

@@ -13,6 +13,7 @@ export interface CurrentUser {
 }
 
 export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
+  if (!features.authReady) return null;
   const session = await auth();
   if (!session?.user?.id) return null;
   return { ...session.user, role: session.user.role ?? "USER" };

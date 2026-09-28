@@ -89,7 +89,8 @@ function NumberInput({ field, values, error, onChange, onUnitChange }: Calculato
   const errorId = `${id}-error`;
   const { format } = resolveNumberField(field, values);
   const value = values[field.key] as number;
-  // While focused we show exactly what the user typed; otherwise a formatted value.
+  // While editing we show exactly what the user typed; otherwise a formatted value.
+  // (Never rewrite the value on focus: that would clear the browser's text selection.)
   const [draft, setDraft] = useState<string | null>(null);
   const shown = draft ?? displayNumber(value, format);
   const isCurrency = format === "currency";
@@ -136,7 +137,6 @@ function NumberInput({ field, values, error, onChange, onUnitChange }: Calculato
           value={shown}
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy(error, field.help, errorId, helpId)}
-          onFocus={() => setDraft(displayNumber(value, format).replace(/,/g, ""))}
           onBlur={() => setDraft(null)}
           onChange={(event) => {
             const raw = event.target.value;

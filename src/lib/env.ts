@@ -24,8 +24,12 @@ export const features = {
   get devAuth() {
     return process.env.NODE_ENV !== "production" && process.env.AUTH_DEV_LOGIN === "true";
   },
+  /** Auth.js needs a secret in production; without one, auth is treated as disabled. */
+  get authReady() {
+    return process.env.NODE_ENV !== "production" || has("AUTH_SECRET");
+  },
   get auth() {
-    return this.githubAuth || this.googleAuth || this.emailAuth || this.devAuth;
+    return this.authReady && (this.githubAuth || this.googleAuth || this.emailAuth || this.devAuth);
   },
   get stripe() {
     return has("STRIPE_SECRET_KEY", "STRIPE_PRICE_PRO_MONTHLY", "STRIPE_PRICE_PRO_ANNUAL") && has("DATABASE_URL");
