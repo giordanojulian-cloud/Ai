@@ -51,7 +51,9 @@ function buildProviders(): Provider[] {
 
 export const configuredProviders = () =>
   (features.authReady ? buildProviders() : []).map((p) => {
-    const provider = typeof p === "function" ? p() : p;
+    // Provider factories keep user overrides (e.g. our "dev" id) in `options`.
+    const base = typeof p === "function" ? p() : p;
+    const provider = { ...base, ...("options" in base ? (base.options as object) : {}) } as { id: string; name: string; type: string };
     return { id: provider.id, name: provider.name, type: provider.type };
   });
 
