@@ -7,6 +7,7 @@ export interface AnalyticsEvents {
   calculator_saved: { slug: string };
   affiliate_clicked: { vertical: string; partner: string; slug?: string };
   signup_started: { provider: string };
+  /** TODO(analytics): fire from an Auth.js `createUser` event once server-side analytics is configured. */
   signup_completed: { provider?: string };
   premium_clicked: { plan: string; location: string };
   search_performed: { query: string; results: number; location: "navbar" | "page" | "home" };

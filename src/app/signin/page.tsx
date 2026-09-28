@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { configuredProviders, signIn } from "@/auth";
 import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { SignInSubmit } from "@/components/account/signin-submit";
 import { Input, Label } from "@/components/ui/input";
 import { Container } from "@/components/ui/container";
 import { siteConfig } from "@/config/site";
@@ -44,9 +44,9 @@ export default async function SignInPage({ searchParams }: PageProps<"/signin">)
               await signIn(provider.id, { redirectTo: callbackUrl });
             }}
           >
-            <Button type="submit" variant="outline" className="w-full">
+            <SignInSubmit provider={provider.id} variant="outline" className="w-full">
               Continue with {provider.name}
-            </Button>
+            </SignInSubmit>
           </form>
         ))}
         {email && (
@@ -59,7 +59,7 @@ export default async function SignInPage({ searchParams }: PageProps<"/signin">)
           >
             <Label htmlFor="signin-email">Email</Label>
             <Input id="signin-email" name="email" type="email" required autoComplete="email" />
-            <Button type="submit">Email me a sign-in link</Button>
+            <SignInSubmit provider="email">Email me a sign-in link</SignInSubmit>
           </form>
         )}
         {dev && (
@@ -73,9 +73,9 @@ export default async function SignInPage({ searchParams }: PageProps<"/signin">)
             <Label htmlFor="dev-email">Development login</Label>
             <p className="text-xs text-muted-foreground">Local development only. Signs in any email without a password.</p>
             <Input id="dev-email" name="email" type="email" required defaultValue="dev@example.com" />
-            <Button type="submit" variant="secondary">
+            <SignInSubmit provider="dev" variant="secondary">
               Sign in (dev)
-            </Button>
+            </SignInSubmit>
           </form>
         )}
         {providers.length === 0 && (
