@@ -1,6 +1,7 @@
 "use client";
 
 import { Bookmark } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { CalculatorValues } from "@/calculators/types";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ type Status = { kind: "idle" } | { kind: "naming" } | { kind: "saving" } | { kin
 
 /** Beta: saves the current inputs to the signed-in user's dashboard. */
 export function SaveCalculation({ slug, calculatorName, values }: { slug: string; calculatorName: string; values: CalculatorValues }) {
+  const router = useRouter();
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const [name, setName] = useState(calculatorName);
 
@@ -23,7 +25,7 @@ export function SaveCalculation({ slug, calculatorName, values }: { slug: string
     }).catch(() => null);
 
     if (response?.status === 401) {
-      window.location.href = `/signin?callbackUrl=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+      router.push(`/signin?callbackUrl=${encodeURIComponent(window.location.pathname + window.location.search)}`);
       return;
     }
     if (!response?.ok) {

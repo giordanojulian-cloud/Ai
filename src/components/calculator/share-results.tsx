@@ -1,9 +1,11 @@
 "use client";
 
 import { Check, Link2, Share2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
+
+const noopSubscribe = () => () => {};
 
 /**
  * Copy a link that reproduces the current inputs. Only calculator inputs are
@@ -11,11 +13,12 @@ import { track } from "@/lib/analytics";
  */
 export function ShareResults({ slug, buildUrl, title }: { slug: string; buildUrl: () => string; title: string }) {
   const [copied, setCopied] = useState(false);
-  const [canNativeShare, setCanNativeShare] = useState(false);
-
-  useEffect(() => {
-    setCanNativeShare(typeof navigator !== "undefined" && typeof navigator.share === "function");
-  }, []);
+  // Server render and hydration assume no Web Share API; the client value applies after hydration.
+  const canNativeShare = useSyncExternalStore(
+    noopSubscribe,
+    () => typeof navigator.share === "function",
+    () => false,
+  );
 
   useEffect(() => {
     if (!copied) return;

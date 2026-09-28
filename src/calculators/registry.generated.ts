@@ -2,17 +2,109 @@
 // Run `npm run calculators:generate` after adding or removing a calculator folder.
 
 import type { CalculatorContent, CalculatorDefinition, CalculatorMeta } from "./types";
+import apyMeta from "./definitions/apy/meta";
+import breakEvenMeta from "./definitions/break-even/meta";
+import capRateMeta from "./definitions/cap-rate/meta";
+import cashOnCashReturnMeta from "./definitions/cash-on-cash-return/meta";
+import closingCostMeta from "./definitions/closing-cost/meta";
+import compoundInterestMeta from "./definitions/compound-interest/meta";
+import concreteMeta from "./definitions/concrete/meta";
+import creditCardPayoffMeta from "./definitions/credit-card-payoff/meta";
+import debtPayoffMeta from "./definitions/debt-payoff/meta";
+import employeeCostMeta from "./definitions/employee-cost/meta";
+import fhaMortgageMeta from "./definitions/fha-mortgage/meta";
+import investmentGrowthMeta from "./definitions/investment-growth/meta";
+import markupMeta from "./definitions/markup/meta";
 import mortgageMeta from "./definitions/mortgage/meta";
+import mortgageAffordabilityMeta from "./definitions/mortgage-affordability/meta";
+import percentageMeta from "./definitions/percentage/meta";
+import profitMarginMeta from "./definitions/profit-margin/meta";
+import rentalPropertyMeta from "./definitions/rental-property/meta";
+import roiMeta from "./definitions/roi/meta";
+import saasValuationMeta from "./definitions/saas-valuation/meta";
+import salaryToHourlyMeta from "./definitions/salary-to-hourly/meta";
+import savingsGoalMeta from "./definitions/savings-goal/meta";
+import squareFootageMeta from "./definitions/square-footage/meta";
+import tipMeta from "./definitions/tip/meta";
 
 export const calculatorMetas: readonly CalculatorMeta[] = [
+  apyMeta,
+  breakEvenMeta,
+  capRateMeta,
+  cashOnCashReturnMeta,
+  closingCostMeta,
+  compoundInterestMeta,
+  concreteMeta,
+  creditCardPayoffMeta,
+  debtPayoffMeta,
+  employeeCostMeta,
+  fhaMortgageMeta,
+  investmentGrowthMeta,
+  markupMeta,
   mortgageMeta,
+  mortgageAffordabilityMeta,
+  percentageMeta,
+  profitMarginMeta,
+  rentalPropertyMeta,
+  roiMeta,
+  saasValuationMeta,
+  salaryToHourlyMeta,
+  savingsGoalMeta,
+  squareFootageMeta,
+  tipMeta,
 ];
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const contentLoaders: Record<string, () => Promise<{ default: CalculatorContent }>> = {
+  "apy": () => import("./definitions/apy/content"),
+  "break-even": () => import("./definitions/break-even/content"),
+  "cap-rate": () => import("./definitions/cap-rate/content"),
+  "cash-on-cash-return": () => import("./definitions/cash-on-cash-return/content"),
+  "closing-cost": () => import("./definitions/closing-cost/content"),
+  "compound-interest": () => import("./definitions/compound-interest/content"),
+  "concrete": () => import("./definitions/concrete/content"),
+  "credit-card-payoff": () => import("./definitions/credit-card-payoff/content"),
+  "debt-payoff": () => import("./definitions/debt-payoff/content"),
+  "employee-cost": () => import("./definitions/employee-cost/content"),
+  "fha-mortgage": () => import("./definitions/fha-mortgage/content"),
+  "investment-growth": () => import("./definitions/investment-growth/content"),
+  "markup": () => import("./definitions/markup/content"),
   "mortgage": () => import("./definitions/mortgage/content"),
+  "mortgage-affordability": () => import("./definitions/mortgage-affordability/content"),
+  "percentage": () => import("./definitions/percentage/content"),
+  "profit-margin": () => import("./definitions/profit-margin/content"),
+  "rental-property": () => import("./definitions/rental-property/content"),
+  "roi": () => import("./definitions/roi/content"),
+  "saas-valuation": () => import("./definitions/saas-valuation/content"),
+  "salary-to-hourly": () => import("./definitions/salary-to-hourly/content"),
+  "savings-goal": () => import("./definitions/savings-goal/content"),
+  "square-footage": () => import("./definitions/square-footage/content"),
+  "tip": () => import("./definitions/tip/content"),
 };
 
 export const definitionLoaders: Record<string, () => Promise<{ default: CalculatorDefinition<any> }>> = {
+  "apy": () => import("./definitions/apy/definition"),
+  "break-even": () => import("./definitions/break-even/definition"),
+  "cap-rate": () => import("./definitions/cap-rate/definition"),
+  "cash-on-cash-return": () => import("./definitions/cash-on-cash-return/definition"),
+  "closing-cost": () => import("./definitions/closing-cost/definition"),
+  "compound-interest": () => import("./definitions/compound-interest/definition"),
+  "concrete": () => import("./definitions/concrete/definition"),
+  "credit-card-payoff": () => import("./definitions/credit-card-payoff/definition"),
+  "debt-payoff": () => import("./definitions/debt-payoff/definition"),
+  "employee-cost": () => import("./definitions/employee-cost/definition"),
+  "fha-mortgage": () => import("./definitions/fha-mortgage/definition"),
+  "investment-growth": () => import("./definitions/investment-growth/definition"),
+  "markup": () => import("./definitions/markup/definition"),
   "mortgage": () => import("./definitions/mortgage/definition"),
+  "mortgage-affordability": () => import("./definitions/mortgage-affordability/definition"),
+  "percentage": () => import("./definitions/percentage/definition"),
+  "profit-margin": () => import("./definitions/profit-margin/definition"),
+  "rental-property": () => import("./definitions/rental-property/definition"),
+  "roi": () => import("./definitions/roi/definition"),
+  "saas-valuation": () => import("./definitions/saas-valuation/definition"),
+  "salary-to-hourly": () => import("./definitions/salary-to-hourly/definition"),
+  "savings-goal": () => import("./definitions/savings-goal/definition"),
+  "square-footage": () => import("./definitions/square-footage/definition"),
+  "tip": () => import("./definitions/tip/definition"),
 };

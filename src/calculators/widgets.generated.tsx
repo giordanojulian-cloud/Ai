@@ -10,5 +10,28 @@ import { bindCalculator, CalculatorSkeleton, type BoundCalculatorProps } from "@
 // One lazily-loaded chunk per calculator: a page only ships the math it needs.
 // Keep each dynamic() call literal so Next.js can preload the chunk during SSR.
 export const calculatorWidgets: Record<string, ComponentType<BoundCalculatorProps>> = {
+  "apy": dynamic(() => import("./definitions/apy/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "break-even": dynamic(() => import("./definitions/break-even/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "cap-rate": dynamic(() => import("./definitions/cap-rate/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "cash-on-cash-return": dynamic(() => import("./definitions/cash-on-cash-return/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "closing-cost": dynamic(() => import("./definitions/closing-cost/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "compound-interest": dynamic(() => import("./definitions/compound-interest/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "concrete": dynamic(() => import("./definitions/concrete/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "credit-card-payoff": dynamic(() => import("./definitions/credit-card-payoff/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "debt-payoff": dynamic(() => import("./definitions/debt-payoff/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "employee-cost": dynamic(() => import("./definitions/employee-cost/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "fha-mortgage": dynamic(() => import("./definitions/fha-mortgage/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "investment-growth": dynamic(() => import("./definitions/investment-growth/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "markup": dynamic(() => import("./definitions/markup/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
   "mortgage": dynamic(() => import("./definitions/mortgage/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "mortgage-affordability": dynamic(() => import("./definitions/mortgage-affordability/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "percentage": dynamic(() => import("./definitions/percentage/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "profit-margin": dynamic(() => import("./definitions/profit-margin/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "rental-property": dynamic(() => import("./definitions/rental-property/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "roi": dynamic(() => import("./definitions/roi/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "saas-valuation": dynamic(() => import("./definitions/saas-valuation/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "salary-to-hourly": dynamic(() => import("./definitions/salary-to-hourly/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "savings-goal": dynamic(() => import("./definitions/savings-goal/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "square-footage": dynamic(() => import("./definitions/square-footage/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
+  "tip": dynamic(() => import("./definitions/tip/definition").then((m) => bindCalculator(m.default)), { loading: CalculatorSkeleton }),
 };
